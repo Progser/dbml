@@ -9,7 +9,7 @@
   "scripts": {
     "test": "npx lerna run test",
     "build": "yarn clean-build && npx lerna run build",
-    "clean-build": "rm -rf ./packages/dbml-cli/lib ./packages/dbml-core/lib ./packages/dbml-parse/dist ./packages/dbml-connector/dist",
+    "clean-build": "npx rimraf ./packages/dbml-cli/lib ./packages/dbml-core/lib ./packages/dbml-parse/dist ./packages/dbml-connector/dist",
     "lint": "npx lerna run lint",
     "lint:fix": "npx lerna run lint:fix"
   },
