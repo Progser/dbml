@@ -6,8 +6,20 @@ import path from 'path';
 
 Promise.promisifyAll(fs);
 
+// Путь к выходной директории — lib/parse
+const outputDir = path.resolve(__dirname, '../../lib/parse');
+
 async function buildParserFile (source, fileName) {
-  return fs.writeFileAsync(path.resolve(__dirname, fileName), source);
+  // Создаём директорию асинхронно, если её нет
+  try {
+    await fs.promises.mkdir(outputDir, { recursive: true });
+  } catch (err) {
+    // Игнорируем ошибку, если директория уже существует
+    if (err.code !== 'EEXIST') throw err;
+  }
+
+  const filePath = path.join(outputDir, fileName);
+  return fs.writeFileAsync(filePath, source);
 }
 
 const options = {

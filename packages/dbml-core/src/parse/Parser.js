@@ -1,9 +1,9 @@
 import { Compiler } from '@dbml/parse';
 import Database from '../model_structure/database';
-import mysqlParser from './mysqlParser';
-import postgresParser from './postgresParser';
-import dbmlParser from './dbmlParser';
-import schemarbParser from './schemarbParser';
+import mysqlParser from '../../lib/parse/mysqlParser';
+import postgresParser from '../../lib/parse/postgresParser';
+import dbmlParser from '../../lib/parse/dbmlParser';
+import schemarbParser from '../../lib/parse/schemarbParser';
 import mssqlParser from './mssqlParser';
 import { parse } from './ANTLR/ASTGeneration';
 import { CompilerError } from './error';
