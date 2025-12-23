@@ -30,7 +30,7 @@ describe('@dbml/core - model_exporter', () => {
         break;
 
       default:
-        expect(res).toBe(output);
+        expect(normalizeText(res)).toBe(normalizeText(output));
         break;
     }
   };

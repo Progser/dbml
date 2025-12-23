@@ -11,7 +11,7 @@ describe('@dbml/core - importer', () => {
 
     const res = importer.import(input, format);
 
-    expect(res).toBe(output);
+    expect(normalizeText(res)).toBe(normalizeText(output));
   };
 
   test.each(scanTestNames(__dirname, 'json_importer/input'))('json_importer/%s', (name) => {

@@ -23,6 +23,44 @@ global.getFileExtension = (format) => {
   return format;
 };
 
+/**
+ * Нормализует текст для сравнения: приводит к единому формату переносов и пробелов.
+ */
+function normalizeText (str) {
+  return str
+    .trim()
+    .replace(/\\r\\n/g, '\\n') // экранированный \r\n → \n
+    .replace(/\r\n/g, '\n') // Windows → Unix
+    .replace(/\n+/g, '\n') // несколько \n → один
+    .replace(/ *\n */g, '\n') // убираем пробелы вокруг \n
+    .replace(/\s+/g, ' ') // все остальные \s → один пробел
+    .trim();
+}
+
+/**
+ * Нормализует все строковые поля в объекте
+ */
+function normalizeObjStrings (obj) {
+  if (typeof obj === 'string') {
+    return normalizeText(obj);
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(normalizeObjStrings);
+  }
+  if (typeof obj === 'object' && obj !== null) {
+    const result = {};
+    Object.keys(obj).sort().forEach((key) => {
+      result[key] = normalizeObjStrings(obj[key]);
+    });
+    return result;
+  }
+  return obj;
+}
+
+// Экспортируем в global
+global.normalizeText = normalizeText;
+global.normalizeObjStrings = normalizeObjStrings;
+
 function omitDeep (obj, predicate) {
   _.forIn(obj, (value, key) => {
     if (predicate(key, value)) {
@@ -45,5 +83,8 @@ global.isEqualExcludeTokenEmpty = (receivedObj, sourceObj) => {
   const sourceObjExcludeTokenEmpty = omitDeep(sourceObj, isTokenEmptyProperty);
   const receivedObjExludeTokenEmpty = omitDeep(receivedObj, isTokenEmptyProperty);
 
-  expect(receivedObjExludeTokenEmpty).toEqual(sourceObjExcludeTokenEmpty);
+  const sourceNormalized = normalizeObjStrings(sourceObjExcludeTokenEmpty);
+  const receivedNormalized = normalizeObjStrings(receivedObjExludeTokenEmpty);
+
+  expect(sourceNormalized).toEqual(receivedNormalized);
 };

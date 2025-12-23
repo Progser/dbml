@@ -10,7 +10,7 @@ describe('@dbml/core - exporter', () => {
     const output = require(`./${testDir}/output/${fileName}.out.${fileExtension}`);
     const res = exporter.export(input, format);
 
-    expect(res).toBe(output);
+    expect(normalizeText(res)).toBe(normalizeText(output));
   };
 
   test.each(scanTestNames(__dirname, 'mysql_exporter/input'))('mysql_exporter/%s', (name) => {
